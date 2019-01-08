@@ -20,5 +20,5 @@ resource "aws_security_group" "ssh" {
   }
 
   tags = "${merge(var.common_tags,
-    map("Name", "${var.environment}-EDP-PRI-SSH-SG"))}"
+    map("Name", "${var.environment}-33N-CODEBUILD-SG"))}"
 }
