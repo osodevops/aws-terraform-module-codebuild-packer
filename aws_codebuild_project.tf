@@ -27,7 +27,7 @@ resource "aws_codebuild_project" "builder" {
   source {
     type     = "GITHUB"
     location = "https://github.com/mitchellh/packer.git"
-    buildspec           = "${var.cd_buildspec}"
+    buildspec           = "${data.template_file.ami_buildspec.rendered}"
     git_clone_depth     = "0"
     report_build_status = true
   }
