@@ -10,7 +10,7 @@ resource "aws_codebuild_project" "builder" {
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"
-    image        = "aws/codebuild/python:3.7.1"
+    image        = "traveloka/codebuild-terraform-ci-cd-image:v0.1.6"
     type         = "LINUX_CONTAINER"
 
     environment_variable {
