@@ -27,15 +27,18 @@ resource "aws_codebuild_project" "builder" {
   source {
     type     = "GITHUB"
     location = "https://github.com/mitchellh/packer.git"
+    buildspec           = "${var.cd_buildspec}"
+    git_clone_depth     = "0"
+    report_build_status = true
   }
 
   tags {
     "Environment" = "Test"
   }
 
-  vpc_config {
-    security_group_ids = []
-    subnets = ["${data.aws_subnet_ids.subnets.ids}"]
-    vpc_id = "${data.aws_vpc.codebuild.id}"
-  }
+//  vpc_config {
+//    security_group_ids = []
+//    subnets = ["${data.aws_subnet_ids.subnets.ids}"]
+//    vpc_id = "${data.aws_vpc.codebuild.id}"
+//  }
 }
