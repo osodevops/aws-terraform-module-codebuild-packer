@@ -1,5 +1,28 @@
 variable "build_timeout" { default = "60" }
+
+variable "compute_type" {
+  type        = "string"
+  default     = "BUILD_GENERAL1_SMALL"
+  description = "The builder instance class"
+}
+
 variable "environment" {}
+
+variable "source_repository_url" {
+  type        = "string"
+  description = "The source repository URL"
+}
+
+variable "environment_build_image" {
+  type        = "string"
+  default     = "aws/codebuild/ubuntu-base:14.04"
+  description = "Docker image used by CodeBuild"
+}
+
+variable "packer_file_location" {
+  type        = "string"
+}
+variable "project_name" {}
 variable "vpc_cidr" {}
 variable "vpc_id" {}
 
@@ -9,33 +32,24 @@ variable "common_tags" {
 
 locals {
   ami_install_commands = [
-    "echo Installing Packer",
-    "curl -o packer.zip https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip && unzip packer.zip",
-    "echo Validating Packer template"
+   
   ]
 
   ami_pre_build_commands = [
-    // Set env var OWNER_REPO, PR_ID, GIT_MASTER_COMMIT_ID,
-    // GITHUB_TOKEN, GIT_ASKPASS, LATEST_COMMIT_APPLY
-    ". ami-setup-env-var.sh",
-
-    // Check CI prerequisites to do Terraform commands and set env var TF_WORKING_DIR
-    ". ami-check.sh",
+    "echo Installing HashiCorp Packer...",
+    "curl -qL -o packer.zip https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_linux_amd64.zip && unzip -o packer.zip",
+    "echo Validating packer tempalte to build...",
+    "./packer validate ${var.packer_file_location}"
   ]
 
   ami_build_commands = [
-    // Do Terraform Plan on TF_WORKING_DIR and store it on artifact folder
-    ". ami-do-terraform-plan.sh",
+      "./packer build -color=false ${var.packer_file_location} | tee build.log"
   ]
 
   ami_post_build_commands = [
-    // Create Plan Artifact
-    ". ami-create-plan-artifact.sh",
-
-    // Upload Plan Artifact to S3 Bucket
-    ". ami-upload-plan-artifact.sh",
-
-    // Notify Plan Artifact to Github Pull Request
-    "ami-notify-plan-artifact-to-github-pr.py",
+      "egrep \"${data.aws_region.current.name}\\:\\sami\\-\" build.log | cut -d' ' -f2 > ami_id.txt",
+      # Packer doesn't return non-zero status; we must do that if Packer build failed
+      "test -s ami_id.txt || exit 1",
+      "echo build completed on `date`"
   ]
 }
