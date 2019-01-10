@@ -22,7 +22,7 @@ resource "aws_codebuild_project" "builder" {
     report_build_status = true
   }
 
-   tags                 = "${var.common_tags}"
+   tags                 = ["${var.common_tags}"]
 
   vpc_config {
     security_group_ids = ["${aws_security_group.codebuild.id}"]
