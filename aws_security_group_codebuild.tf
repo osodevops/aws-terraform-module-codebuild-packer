@@ -9,7 +9,7 @@ resource "aws_security_group" "codebuild" {
     to_port         = 22
     protocol        = "TCP"
     self = true
-    security_groups = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
