@@ -30,8 +30,8 @@ variable "source_repository_url" {
   description = "The source repository URL"
 }
 
-variable "vpc_cidr" {}
 
+variable "subnet_ids" {}
 variable "vpc_id" {}
 
 variable "common_tags" {
