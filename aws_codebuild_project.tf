@@ -25,8 +25,8 @@ resource "aws_codebuild_project" "builder" {
    tags                 = ["${var.common_tags}"]
 
   vpc_config {
-    security_group_ids = ["${aws_security_group.codebuild.id}"]
-    subnets = ["${data.aws_subnet_ids.subnets.ids}"]
-    vpc_id = "${data.aws_vpc.codebuild.id}"
+    security_group_ids  = ["${aws_security_group.codebuild.id}"]
+    subnets             = ["${data.aws_subnet_ids.subnets.ids}"]
+    vpc_id              = "${data.aws_vpc.codebuild.id}"
   }
 }
