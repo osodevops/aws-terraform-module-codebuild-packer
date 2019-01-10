@@ -1,7 +1,7 @@
 resource "aws_security_group" "codebuild" {
   name        = "${var.environment}-33N-CODEBUILD-SG"
   description = "Managed by Terraform"
-  vpc_id      = "${data.aws_vpc.codebuild.id}"
+  vpc_id      = "${var.vpc_id}"
 
   # from AWS codebuild - TODO: find out what IP this is.
   ingress {
