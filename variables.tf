@@ -8,22 +8,30 @@ variable "compute_type" {
 
 variable "environment" {}
 
-variable "source_repository_url" {
-  type        = "string"
-  description = "The source repository URL"
-}
-
 variable "environment_build_image" {
-  type        = "string"
-  default     = "aws/codebuild/ubuntu-base:14.04"
+  type = "string"
+  default = "aws/codebuild/ubuntu-base:14.04"
   description = "Docker image used by CodeBuild"
 }
 
 variable "packer_file_location" {
   type        = "string"
+  description = "The file path of the .json packer to build."
 }
-variable "project_name" {}
+
+variable "project_name" {
+  type = "string"
+  description = "Name of the CodeBuild Project"
+  default = "AMI Builder"
+}
+
+variable "source_repository_url" {
+  type        = "string"
+  description = "The source repository URL"
+}
+
 variable "vpc_cidr" {}
+
 variable "vpc_id" {}
 
 variable "common_tags" {
