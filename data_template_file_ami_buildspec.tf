@@ -1,4 +1,4 @@
-// Transit VPC spoke template
+// CodeBuild buildspec template
 data "template_file" "ami_buildspec" {
   template = <<EOF
 version: 0.2
