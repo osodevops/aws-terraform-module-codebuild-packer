@@ -22,7 +22,7 @@ variable "packer_file_location" {
 variable "project_name" {
   type = "string"
   description = "Name of the CodeBuild Project"
-  default = "AMI Builder"
+  default = "AMI-Builder"
 }
 
 variable "source_repository_url" {
