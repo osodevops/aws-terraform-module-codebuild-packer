@@ -19,6 +19,7 @@ data "aws_iam_policy_document" "local_codebuild" {
         "ec2:CopyImage",
         "ec2:CreateImage",
         "ec2:CreateKeypair",
+        "ec2:CreateNetworkInterface",
         "ec2:CreateSecurityGroup",
         "ec2:CreateSnapshot",
         "ec2:CreateTags",
