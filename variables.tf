@@ -46,6 +46,8 @@ locals {
   ami_pre_build_commands = [
     "echo Installing HashiCorp Packer...",
     "curl -qL -o packer.zip https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_linux_amd64.zip && unzip -o packer.zip",
+    "echo Creat build number from git hash",
+    "BUILD_NUMBER=$(git rev-parse --short HEAD)",
     "echo Validating packer tempalte to build...",
     "./packer validate ${var.packer_file_location}"
   ]
