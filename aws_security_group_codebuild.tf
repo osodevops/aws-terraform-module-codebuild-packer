@@ -1,5 +1,5 @@
 resource "aws_security_group" "codebuild" {
-  name        = "${var.environment}-33N-CODEBUILD-SG"
+  name        = "${upper(var.environment)}-${upper(var.project_name)}-CODEBUILD-SG"
   description = "Managed by Terraform"
   vpc_id      = "${var.vpc_id}"
 
@@ -20,5 +20,5 @@ resource "aws_security_group" "codebuild" {
   }
 
   tags = "${merge(var.common_tags,
-    map("Name", "${var.environment}-33N-CODEBUILD-SG"))}"
+    map("Name", "${var.environment}-${upper(var.project_name)}-CODEBUILD-SG"))}"
 }

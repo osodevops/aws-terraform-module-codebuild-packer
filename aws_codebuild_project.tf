@@ -1,6 +1,6 @@
 resource "aws_codebuild_project" "builder" {
-  name                  = "${var.project_name}"
-  description           = "AMI builder using Packer and Ansible."
+  name                  = "${upper(var.project_name)}"
+  description           = "Managed by Terraform: AMI builder using Packer and Ansible."
   build_timeout         = "${var.build_timeout}"
   service_role          = "${aws_iam_role.local_codebuild_role.arn}"
 

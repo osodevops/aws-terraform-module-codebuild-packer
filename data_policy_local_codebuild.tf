@@ -1,71 +1,55 @@
 data "aws_iam_policy_document" "local_codebuild" {
   statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
     resources = ["*"]
 
-    not_actions = [
-      "config:*",
-      "cloudtrail:*",
-      "organizations:*",
-      "iam:CreateAccountAlias",
-      "iam:DeleteAccountAlias",
-      "iam:DeleteAccountPasswordPolicy",
-      "iam:*SAMLProvider",
-      "cloudformation:*StackSet*",
-    ]
+    effect = "Allow"
+
   }
 
   statement {
     actions = [
-      "cloudformation:DeleteStack",
-      "cloudformation:ExecuteChangeSet",
-      "cloudformation:SetStackPolicy",
-      "cloudformation:UpdateStack",
-      "cloudformation:CancelUpdateStack",
-      "cloudformation:ContinueUpdateRollback",
-      "cloudformation:CreateStack",
-      "cloudformation:CreateChangeSet",
+       "ec2:AttachVolume",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:CopyImage",
+        "ec2:CreateImage",
+        "ec2:CreateKeypair",
+        "ec2:CreateSecurityGroup",
+        "ec2:CreateSnapshot",
+        "ec2:CreateTags",
+        "ec2:CreateVolume",
+        "ec2:DeleteKeypair",
+        "ec2:DeleteSecurityGroup",
+        "ec2:DeleteSnapshot",
+        "ec2:DeleteVolume",
+        "ec2:DeregisterImage",
+        "ec2:DescribeImageAttribute",
+        "ec2:DescribeImages",
+        "ec2:DescribeInstances",
+        "ec2:DescribeRegions",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeTags",
+        "ec2:DescribeVolumes",
+        "ec2:DetachVolume",
+        "ec2:GetPasswordData",
+        "ec2:ModifyImageAttribute",
+        "ec2:ModifyInstanceAttribute",
+        "ec2:ModifySnapshotAttribute",
+        "ec2:RegisterImage",
+        "ec2:RunInstances",
+        "ec2:StopInstances",
+        "ec2:TerminateInstances"
     ]
 
-    resources = [
-      "arn:aws:cloudformation:*:*:stack/StackSet-*/*",
-      "arn:aws:cloudformation:*:*:stack/cloudops-cloudformation-prod-aws-stack-mana*/*",
-    ]
+    resources = ["*"]
 
-    effect = "Deny"
-    sid    = "DenyCloudOpsCFStacks"
-  }
-
-  statement {
-    actions = [
-      "iam:Delete*",
-      "iam:Put*",
-      "iam:Update*",
-      "iam:PassRole",
-      "iam:Detach*",
-      "iam:Attach*",
-    ]
-
-    resources = [
-      "arn:aws:iam::*:role/AWSCloudFormationStackSet*",
-      "arn:aws:iam::*:role/WP-CloudOps-Global-Admin",
-      "arn:aws:iam::*:role/WP-Trusted-Local-Admin",
-    ]
-
-    effect = "Deny"
-    sid    = "DenyCloudOpsIAMRoles"
-  }
-
-  statement {
-    actions = [
-      "sts:AssumeRole*",
-    ]
-
-    resources = [
-      "arn:aws:iam::*:role/AWSCloudFormationStackSet*",
-      "arn:aws:iam::*:role/WP-CloudOps-Global-Admin",
-    ]
-
-    effect = "Deny"
-    sid    = "DenyAssumeCloudOpsRoles"
+    effect = "Allow"
   }
 }
