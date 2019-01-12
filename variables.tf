@@ -1,5 +1,10 @@
 variable "build_timeout" { default = "60" }
 
+variable "code_private_subnet_ids" {
+  type = "list"
+  description = "Private subnet IDs for CodeBuild."
+}
+
 variable "compute_type" {
   type        = "string"
   default     = "BUILD_GENERAL1_SMALL"
@@ -12,6 +17,11 @@ variable "environment_build_image" {
   type = "string"
   default = "aws/codebuild/ubuntu-base:14.04"
   description = "Docker image used by CodeBuild"
+}
+
+variable "packer_build_subnet_id" {
+  type        = "string"
+  description = "Public subnet where Packer build instacen should run."
 }
 
 variable "packer_file_location" {
@@ -30,7 +40,7 @@ variable "source_repository_url" {
 }
 
 
-variable "subnet_ids" {}
+
 variable "vpc_id" {}
 
 variable "common_tags" {
