@@ -57,6 +57,8 @@ locals {
     "curl -qL -o packer.zip https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_linux_amd64.zip && unzip -o packer.zip",
     "echo Creat build number from git hash",
     "BUILD_NUMBER=$(git rev-parse --short HEAD)",
+    "PACKER_BUILD_VPC_ID=\"${var.vpc_id}\"",
+    "PACKER_BUILD_SUBNET_ID=\"${var.packer_build_subnet_ids[0]}\"",
     "echo Validating packer tempalte to build...",
     "./packer validate ${var.packer_file_location}"
   ]

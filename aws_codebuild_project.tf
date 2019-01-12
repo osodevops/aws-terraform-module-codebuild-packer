@@ -12,17 +12,6 @@ resource "aws_codebuild_project" "builder" {
     compute_type        = "${var.compute_type}"
     image               = "${var.environment_build_image}"
     type                = "LINUX_CONTAINER"
-
-    # VPC ID for where Packer instance will run.
-    environment_variable {
-      name = "packer_build_vpc_id"
-      value = "${var.vpc_id}"
-    }
-    # Subnet ID where Packer should start instance.
-    environment_variable {
-      name = "packer_build_subnet_id"
-      value = "${var.packer_build_subnet_ids[0]}"
-    }
   }
 
   source {
