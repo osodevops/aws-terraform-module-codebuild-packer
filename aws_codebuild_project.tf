@@ -21,7 +21,7 @@ resource "aws_codebuild_project" "builder" {
     # Subnet ID where Packer should start instance.
     environment_variable {
       name = "packer_build_subnet_id"
-      value = "${var.packer_build_subnet_id}"
+      value = "${var.packer_build_subnet_ids[0]}"
     }
   }
 
@@ -35,7 +35,7 @@ resource "aws_codebuild_project" "builder" {
 
   vpc_config {
     security_group_ids  = ["${aws_security_group.codebuild.id}"]
-    subnets             = ["${var.code_private_subnet_ids}"]
+    subnets             = ["${var.codebuild_private_subnet_ids[0]}"]
     vpc_id              = "${var.vpc_id}"
   }
 }

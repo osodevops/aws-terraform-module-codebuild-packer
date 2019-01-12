@@ -1,6 +1,6 @@
 variable "build_timeout" { default = "60" }
 
-variable "code_private_subnet_ids" {
+variable "codebuild_private_subnet_ids" {
   type = "list"
   description = "Private subnet IDs for CodeBuild."
 }
@@ -19,7 +19,7 @@ variable "environment_build_image" {
   description = "Docker image used by CodeBuild"
 }
 
-variable "packer_build_subnet_id" {
+variable "packer_build_subnet_ids" {
   type        = "list"
   description = "Public subnet where Packer build instacen should run."
 }
