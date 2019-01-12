@@ -20,7 +20,7 @@ variable "environment_build_image" {
 }
 
 variable "packer_build_subnet_id" {
-  type        = "string"
+  type        = "list"
   description = "Public subnet where Packer build instacen should run."
 }
 
