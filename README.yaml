@@ -1,0 +1,46 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: aws-terraform-codebuild-packer
+
+# Tags of this project
+tags:
+  - aws
+  - terraform
+  - terraform-modules
+  - codebuild
+  - packer
+
+# Categories of this project
+categories:
+  - terraform-modules/CICD
+
+# License of this project
+license: "APACHE2"
+
+# Copyrights
+copyrights:
+  - name: "OSO DevOps"
+    url: "https://osodevops.io"
+    year: "2019"
+
+# How to use this project
+usage: |-
+  Include this repository as a module in your existing terraform code:
+  ```hcl
+  module "codebuild" {
+    source                            = "git::ssh://git@github.com/osodevops/aws-terraform-module-codebuild-packer.git"
+    codebuild_private_subnet_ids      = "${data.aws_subnet_ids.private.ids}"
+    common_tags                       = "${var.common_tags}"
+    environment                       = "${var.common_tags["Environment"]}"
+    packer_file_location              = "${var.packer_file_location}"
+    packer_build_subnet_ids           = "${data.aws_subnet_ids.public.ids}"
+    project_name                      = "${var.project_name}"
+    source_repository_url             = "${var.source_repository_url}"
+    vpc_id                            = "${data.aws_vpc.vpc.id}"
+  }
+  ```
