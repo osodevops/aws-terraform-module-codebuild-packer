@@ -5,6 +5,8 @@
 .idea
 *.iml
 .terraform
+.build-harness
+build-harness
 *.tfplan
 *.tfstate
 *.tfstate.*
@@ -15,7 +17,6 @@
 *.stackdump
 *.pem
 
-aric*.zip
 id_rsa*
 lambda-backup.zip
 .vscode
