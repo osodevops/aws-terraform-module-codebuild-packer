@@ -15,6 +15,24 @@ data "aws_iam_policy_document" "local_codebuild" {
 
   statement {
     actions = [
+      "ssm:DescribeParameters",
+      "ssm:PutParameter",
+      "ssm:GetParameterHistory",
+      "ssm:DescribeDocumentParameters",
+      "ssm:GetParametersByPath",
+      "ssm:GetParameters",
+      "ssm:GetParameter"
+    ]
+
+    resources = [
+      "*"]
+
+    effect = "Allow"
+
+  }
+
+  statement {
+    actions = [
       "ec2:AttachVolume",
       "ec2:AuthorizeSecurityGroupIngress",
       "ec2:CopyImage",
