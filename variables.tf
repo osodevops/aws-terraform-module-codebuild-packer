@@ -29,6 +29,12 @@ variable "packer_file_location" {
   description = "The file path of the .json packer to build."
 }
 
+variable "packer_vars_file_location" {
+  type = "string"
+  default = ""
+  description = "The file path to where extra Packer vars can be referenced"
+}
+
 variable "project_name" {
   type = "string"
   description = "Name of the CodeBuild Project"
@@ -65,7 +71,7 @@ locals {
   ]
 
   ami_build_commands = [
-      "./packer build -color=false ${var.packer_file_location} | tee build.log"
+      "./packer build -var-file=\"${var.packer_vars_file_location}\" -color=false ${var.packer_file_location} | tee build.log"
   ]
 
   ami_post_build_commands = [
