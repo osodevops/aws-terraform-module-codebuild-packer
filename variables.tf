@@ -67,7 +67,7 @@ locals {
     "PACKER_BUILD_VPC_ID=\"${var.vpc_id}\"",
     "PACKER_BUILD_SUBNET_ID=\"${var.packer_build_subnet_ids[0]}\"",
     "echo Validating packer tempalte to build...",
-    "./packer validate ${var.packer_file_location}"
+    "./packer validate -var-file=\"${var.packer_vars_file_location}\" ${var.packer_file_location}"
   ]
 
   ami_build_commands = [
