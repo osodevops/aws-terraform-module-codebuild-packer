@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "local_codebuild" {
   statement {
     sid = "allowPackerPassRole"
     effect = "Allow"
-    actions = ["ian:PassRole"]
+    actions = ["iam:PassRole"]
     resources = ["*",]
   }
 
