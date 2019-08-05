@@ -13,6 +13,10 @@ variable "compute_type" {
 
 variable "environment" {}
 
+variable "encrypt_ami" {
+  default = false
+}
+
 variable "environment_build_image" {
   type = "string"
   default = "aws/codebuild/ubuntu-base:14.04"
@@ -54,6 +58,8 @@ variable "common_tags" {
 }
 
 locals {
+  is_ami_encryption_enable    = "${var.encrypt_ami == true ? 1 : 0}"
+
   ami_install_commands = [
    
   ]

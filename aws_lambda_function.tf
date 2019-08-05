@@ -1,0 +1,25 @@
+resource "aws_lambda_function" "ami_encryption_lambda" {
+  count         = "${local.is_ami_encryption_enable}"
+  filename      = "${data.archive_file.ami_encryption.0.output_path}"
+  description   = "Responsible for creating AMI with encrypted root volume."
+  function_name = "${var.environment}-AMI-ENCRYPTION-FUNCTION"
+
+  role          = "${aws_iam_role.ami_encrypt_lambda.arn}"
+  handler       = "ami_encryption.lambda_handler"
+  runtime       = "python2.7"
+  timeout       = 60
+  source_code_hash = "${data.archive_file.ami_encryption.0.output_base64sha256}"
+
+  environment {
+    variables = {
+      BACKUP_TAG_NAME = "${var.backup_tag_name}"
+      BACKUP_TAG_VALUE = "${var.backup_tag_value}"
+      DEFAULT_BACKUP_RETENTION_PERIOD = "${var.default_backup_retention_period}"
+    }
+  }
+
+
+  tags = "${merge(var.common_tags,
+    map("Name" , "${var.environment}-AMI-ENCRYPTION-LAMBDA")
+  )}"
+}
