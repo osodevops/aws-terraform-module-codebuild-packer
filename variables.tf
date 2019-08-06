@@ -58,8 +58,6 @@ variable "common_tags" {
 }
 
 locals {
-  is_ami_encryption_enable    = "${var.encrypt_ami == true ? 1 : 0}"
-
   ami_install_commands = [
    
   ]
