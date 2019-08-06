@@ -82,6 +82,8 @@ locals {
       "egrep \"${data.aws_region.current.name}\\:\\sami\\-\" build.log | cut -d' ' -f2 > ami_id.txt",
       # Packer doesn't return non-zero status; we must do that if Packer build failed
       "test -s ami_id.txt || exit 1",
+      "sed -i.bak \"s/<<AMI-ID>>/$(cat ami_id.txt)/g\" ami_builder_event.json",
+      "aws events put-events --entries file://ami_builder_event.json",
       "echo build completed on `date`"
   ]
 }

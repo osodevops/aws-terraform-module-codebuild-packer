@@ -1,10 +1,9 @@
 # Automated AMI Backups
 import copy
+import os
 
 import boto3
-import collections
 import json
-import time
 import logging
 
 ec = boto3.client('ec2', 'eu-west-2')
@@ -19,14 +18,15 @@ def lambda_handler(event, context):
     logger.info(data)
 
     # grab parameters from our event
-    resource_id = event['resource_id']
-    source_region = event['source_region']
+    ownerID = event['.account']
+    project_name = event['.detail.project-name']
+    source_region = event['.region']
     debug = event['debug']
-    destination_region = event['destination_region']
+    destination_region = event['.region']
 
     # KMS Flag and config
-    kms_enabled = event['kmsEnabled']
-    dest_kms_key = event['kmsKey']
+    kms_enabled = os.environ['KMS_ENABLED']
+    dest_kms_key = os.environ['KMS_KEY']
 
 
     # init boto3
@@ -35,63 +35,70 @@ def lambda_handler(event, context):
     destination_client = boto3.client('ec2', destination_region)
 
     # source AMI
-    source_ami = source_resource.Image(resource_id)
+    filters = [{'Name': 'tag:Image', 'Values': ['Gold'],'Name': 'tag:Name', 'Values': [project_name + '*'],}]
+    myImages = source_resource.images.filter(Owners=[ownerID], Filters=filters).all()
 
-    logger.info('Attempting to copy {} from {} to {}'.format(resource_id, source_region, destination_region))
+    logger.info('Found the following images: {}'.format(myImages))
 
-    if kms_enabled == True and dest_kms_key != '' and dest_kms_key != None and dest_kms_key != 'Default':
-
-        logger.info('kms_enabled is true and kms key param is present. attempting to encrypt destination replica using the following key: {}.'.format(dest_kms_key))
-        create_destination_ami = destination_client.copy_image(
-            Description='Replica of {} from {}'.format(resource_id, source_region),
-            Name="ENC-" + source_ami.name,
-            SourceImageId=source_ami.id,
-            SourceRegion=source_region,
-            Encrypted=True,
-            KmsKeyId=dest_kms_key
-        )
-
-    elif kms_enabled == True and (dest_kms_key == '' or dest_kms_key == None or dest_kms_key == "Default"):
-
-        logger.info('kms_enabled is true and kms key param is NOT present. snapshots will be encrypted using the default kms CMK in the destination region.')
-        create_destination_ami = destination_client.copy_image(
-            Description='Replica of {} from {}'.format(resource_id, source_region),
-            Name="ENC-" + source_ami.name,
-            SourceImageId=source_ami.id,
-            SourceRegion=source_region,
-            Encrypted=True
-        )
-
-    else:
-
-        logger.info('kms_enabled is false. attempting to copy unencrypted snapshots to destination region.')
-        for blockdevice in source_ami.block_device_mappings:
-            snapshot = source_resource.Snapshot(blockdevice['Ebs']['SnapshotId'])
-            if snapshot.encrypted == True:
-                logger.info('snapshot {} is encrypted and associated with {}. since no kms CMK was specified for {} the snapshot will be copied to the destination using the default kms CMK in that region.'.format(snapshot.snapshot_id, source_ami.image_id, destination_region))
-
-        create_destination_ami = destination_client.copy_image(
-            Description='Replica of {} from {}'.format(resource_id, source_region),
-            Name="ENC-" + source_ami.name,
-            SourceImageId=source_ami.id,
-            SourceRegion=source_region
-        )
-
-    destination_ami = destination_resource.Image(create_destination_ami['ImageId'])
-
-    cur_tags = boto3_tag_list_to_ansible_dict(source_ami.tags)
-    new_tags = copy.deepcopy(cur_tags)
-    new_tags['source_ami'] = source_ami.id
-    new_tags['source_region'] = source_region
-    if debug:
-        logger.info('Tags are {}'.format(new_tags))
-    destination_ami.create_tags(Tags=ansible_dict_to_boto3_tag_list(new_tags))
-
-    logger.info('New AMI in {} is {}'.format(destination_region, destination_ami.id))
-
-    event['destination_ami_id'] = create_destination_ami['ImageId']
-
-    return event
+    # Filter on tag and remove Image, Gold Tag
+    #
+    # source_ami = source_resource.Image(resource_id)
+    #
+    # logger.info('Attempting to copy {} from {} to {}'.format(resource_id, source_region, destination_region))
+    #
+    # if kms_enabled == True and dest_kms_key != '' and dest_kms_key != None and dest_kms_key != 'Default':
+    #
+    #     logger.info('kms_enabled is true and kms key param is present. attempting to encrypt destination replica using the following key: {}.'.format(dest_kms_key))
+    #     create_destination_ami = destination_client.copy_image(
+    #         Description='Replica of {} from {}'.format(resource_id, source_region),
+    #         Name="ENC-" + source_ami.name,
+    #         SourceImageId=source_ami.id,
+    #         SourceRegion=source_region,
+    #         Encrypted=True,
+    #         KmsKeyId=dest_kms_key
+    #     )
+    #
+    # elif kms_enabled == True and (dest_kms_key == '' or dest_kms_key == None or dest_kms_key == "Default"):
+    #
+    #     logger.info('kms_enabled is true and kms key param is NOT present. snapshots will be encrypted using the default kms CMK in the destination region.')
+    #     create_destination_ami = destination_client.copy_image(
+    #         Description='Replica of {} from {}'.format(resource_id, source_region),
+    #         Name="ENC-" + source_ami.name,
+    #         SourceImageId=source_ami.id,
+    #         SourceRegion=source_region,
+    #         Encrypted=True
+    #     )
+    #
+    # else:
+    #
+    #     logger.info('kms_enabled is false. attempting to copy unencrypted snapshots to destination region.')
+    #     for blockdevice in source_ami.block_device_mappings:
+    #         snapshot = source_resource.Snapshot(blockdevice['Ebs']['SnapshotId'])
+    #         if snapshot.encrypted == True:
+    #             logger.info('snapshot {} is encrypted and associated with {}. since no kms CMK was specified for {} the snapshot will be copied to the destination using the default kms CMK in that region.'.format(snapshot.snapshot_id, source_ami.image_id, destination_region))
+    #
+    #     create_destination_ami = destination_client.copy_image(
+    #         Description='Replica of {} from {}'.format(resource_id, source_region),
+    #         Name="ENC-" + source_ami.name,
+    #         SourceImageId=source_ami.id,
+    #         SourceRegion=source_region
+    #     )
+    #
+    # destination_ami = destination_resource.Image(create_destination_ami['ImageId'])
+    #
+    # cur_tags = boto3_tag_list_to_ansible_dict(source_ami.tags)
+    # new_tags = copy.deepcopy(cur_tags)
+    # new_tags['source_ami'] = source_ami.id
+    # new_tags['source_region'] = source_region
+    # if debug:
+    #     logger.info('Tags are {}'.format(new_tags))
+    # destination_ami.create_tags(Tags=ansible_dict_to_boto3_tag_list(new_tags))
+    #
+    # logger.info('New AMI in {} is {}'.format(destination_region, destination_ami.id))
+    #
+    # event['destination_ami_id'] = create_destination_ami['ImageId']
+    #
+    # return event
 
 def boto3_tag_list_to_ansible_dict(tags_list):
     tags_dict = {}
