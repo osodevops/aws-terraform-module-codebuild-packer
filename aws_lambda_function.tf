@@ -6,8 +6,8 @@ resource "aws_lambda_function" "ami_encryption_lambda" {
 
   role          = "${aws_iam_role.ami_encrypt_lambda.arn}"
   handler       = "ami_encryption.lambda_handler"
-  runtime       = "python2.7"
-  timeout       = 60
+  runtime       = "python3.6"
+  timeout       = 180
   source_code_hash = "${data.archive_file.ami_encryption.0.output_base64sha256}"
 
   environment {
