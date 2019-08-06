@@ -14,8 +14,7 @@ variable "compute_type" {
 variable "environment" {}
 
 variable "encrypt_ami" {
-  type = bool
-  default = false
+  default = true
 }
 
 variable "environment_build_image" {
