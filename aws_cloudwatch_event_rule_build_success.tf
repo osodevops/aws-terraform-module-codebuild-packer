@@ -25,7 +25,7 @@ resource "aws_cloudwatch_event_rule" "build_alert" {
 
 resource "aws_cloudwatch_event_target" "lamba_alert" {
   # Create ami encryption target
-  rule      = aws_cloudwatch_event_rule.build_alert.name
+  rule      = "${aws_cloudwatch_event_rule.build_alert.name}"
   target_id = "ami-encryption-lambda"
-  arn       = aws_lambda_function.ami_encryption_lambda.arn
+  arn       = "${aws_lambda_function.ami_encryption_lambda.arn}"
 }
