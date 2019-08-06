@@ -10,9 +10,6 @@ resource "aws_lambda_function" "ami_encryption_lambda" {
   timeout       = 180
   source_code_hash = "${data.archive_file.ami_encryption.0.output_base64sha256}"
 
-  environment {
-    variables = {}
-  }
 
 
   tags = "${merge(var.common_tags,
