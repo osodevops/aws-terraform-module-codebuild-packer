@@ -24,16 +24,3 @@ EOF
     post_build_commands = "${join("\n      - ", local.ami_post_build_commands)}"
   }
 }
-
-data template_file "ami_builder_packer" {
-  template = <<EOF
-[
-        {
-            "Source": "com.ami.builder",
-            "DetailType": "AmiBuilder",
-            "Detail": "{ \"AmiStatus\": \"Created\"}",
-            "Resources": [ "<<AMI-ID>>" ]
-        }
-]
-EOF
-}
