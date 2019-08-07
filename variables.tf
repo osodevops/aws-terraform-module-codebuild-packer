@@ -17,6 +17,12 @@ variable "encrypt_ami" {
   default = true
 }
 
+variable "kms_key_arn" {
+  description = "If Encrypt_ami set to true then you must pass in the arn of the key you wish to encrypt disk with."
+  default = "Default"
+  type = "string"
+}
+
 variable "environment_build_image" {
   type = "string"
   default = "aws/codebuild/ubuntu-base:14.04"
@@ -82,6 +88,7 @@ locals {
       "egrep \"${data.aws_region.current.name}\\:\\sami\\-\" build.log | cut -d' ' -f2 > ami_id.txt",
       # Packer doesn't return non-zero status; we must do that if Packer build failed
       "test -s ami_id.txt || exit 1",
+      "echo \"${data.template_file.ami_builder_packer.rendered}\" > ami_builder_event.json",
       "sed -i.bak \"s/<<AMI-ID>>/$(cat ami_id.txt)/g\" ami_builder_event.json",
       "aws events put-events --entries file://ami_builder_event.json",
       "echo build completed on `date`"

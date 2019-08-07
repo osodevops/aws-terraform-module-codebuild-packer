@@ -12,11 +12,10 @@ resource "aws_lambda_function" "ami_encryption_lambda" {
 
   environment {
     variables = {
-      KMS_ENABLED = "true"
-      KMS_KEY = "${var.encrypt_ami}"
+      KMS_ENABLED = "${var.encrypt_ami}"
+      KMS_KEY = "${var.kms_key_arn}"
     }
   }
-
 
   tags = "${merge(var.common_tags,
     map("Name" , "${var.environment}-AMI-ENCRYPTION-LAMBDA")
