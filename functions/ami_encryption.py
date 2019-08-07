@@ -24,10 +24,10 @@ def lambda_handler(event, context):
     destination_region = event['region']
 
     # KMS Flag and config
-    kms_enabled = os.environ['KMS_ENABLED']
+    kms_enabled = bool(os.environ['KMS_ENABLED'])
     dest_kms_key = os.environ['KMS_KEY']
 
-    logger.info('kms enabled: ' + kms_enabled)
+    logger.info('kms enabled: {}'.format(kms_enabled))
     logger.info('kms key: ' + dest_kms_key)
 
     # init boto3
@@ -39,7 +39,7 @@ def lambda_handler(event, context):
     source_ami = source_resource.Image(resource_id)
     logger.info('Attempting to copy {} from {} to {}'.format(resource_id, source_region, destination_region))
 
-    if kms_enabled == 'true' and dest_kms_key != '' and dest_kms_key != None and dest_kms_key != 'Default':
+    if kms_enabled == True and dest_kms_key != '' and dest_kms_key != None and dest_kms_key != 'Default':
 
         logger.info('kms_enabled is true and kms key param is present. attempting to encrypt destination replica using the following key: {}.'.format(dest_kms_key))
         create_destination_ami = destination_client.copy_image(
@@ -51,7 +51,7 @@ def lambda_handler(event, context):
             KmsKeyId=dest_kms_key
         )
 
-    elif kms_enabled == 'true' and (dest_kms_key == '' or dest_kms_key == None or dest_kms_key == 'Default'):
+    elif kms_enabled == True and (dest_kms_key == '' or dest_kms_key == None or dest_kms_key == 'Default'):
 
         logger.info('kms_enabled is true and kms key param is NOT present. snapshots will be encrypted using the default kms CMK in the destination region.')
         create_destination_ami = destination_client.copy_image(
@@ -72,7 +72,7 @@ def lambda_handler(event, context):
 
         create_destination_ami = destination_client.copy_image(
             Description='Replica of {} from {}'.format(resource_id, source_region),
-            Name="ENC-" + source_ami.name,
+            Name=source_ami.name,
             SourceImageId=source_ami.id,
             SourceRegion=source_region
         )
@@ -83,7 +83,7 @@ def lambda_handler(event, context):
     new_tags = copy.deepcopy(cur_tags)
     new_tags['source_ami'] = source_ami.id
     new_tags['source_region'] = source_region
-    if(kms_enabled == 'true'):
+    if(kms_enabled == True):
         new_tags['encrypted'] = 'yes'
         new_tags['Name'] = 'ENC-' + source_ami.name
 
