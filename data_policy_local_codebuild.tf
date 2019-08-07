@@ -38,6 +38,13 @@ data "aws_iam_policy_document" "local_codebuild" {
   }
 
   statement {
+    sid = "allowCodeBuildPushEvents"
+    effect = "Allow"
+    actions = ["events:PutEvents"]
+    resources = ["*"]
+  }
+
+  statement {
     actions = [
       "ec2:AttachVolume",
       "ec2:AuthorizeSecurityGroupIngress",
