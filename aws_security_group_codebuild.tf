@@ -20,5 +20,5 @@ resource "aws_security_group" "codebuild" {
   }
 
   tags = "${merge(var.common_tags,
-    map("Name", "${upper(var.environment)-${upper(var.project_name)}-CODEBUILD-SG"))}"
+    map("Name", "${var.environment}-${upper(var.project_name)}-CODEBUILD-SG"))}"
 }
