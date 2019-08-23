@@ -25,7 +25,7 @@ variable "kms_key_arn" {
 
 variable "environment_build_image" {
   type = "string"
-  default = "aws/codebuild/ubuntu-base:14.04"
+  default = "aws/codebuild/standard:1.0"
   description = "Docker image used by CodeBuild"
 }
 
