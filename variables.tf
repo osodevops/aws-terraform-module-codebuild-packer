@@ -93,7 +93,7 @@ locals {
       "   curl -qL -o ami_builder_event.json https://gist.githubusercontent.com/sionsmith/23b7dfcd3ab9c302dc1c172c871a589a/raw/cf96e3cde40f413afa1d3405f33d4163bdb8db0b/ami_builder_event.json",
       "   sed -i.bak \"s/<<AMI-ID>>/$(cat ami_id.txt)/g\" ami_builder_event.json",
       "   aws events put-events --entries file://ami_builder_event.json",
-      "   fi",
+      "    fi",
       "echo build completed on `date`"
   ]
 }
