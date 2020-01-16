@@ -20,6 +20,8 @@ build-harness
 id_rsa*
 lambda-backup.zip
 .vscode
+venv
+sample.json
 .vagrant/
 *un~
 *~
