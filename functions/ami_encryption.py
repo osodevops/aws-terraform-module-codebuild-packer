@@ -1,4 +1,4 @@
-# Automated AMI Backups
+# Automated AMI Encryption
 import copy
 import os
 
