@@ -13,7 +13,13 @@ variable "compute_type" {
 
 variable "environment" {}
 
+variable "github_token" {
+  type = string
+  default = ""
+}
+
 variable "encrypt_ami" {
+  type = bool
   default = true
 }
 
@@ -25,7 +31,7 @@ variable "kms_key_arn" {
 
 variable "environment_build_image" {
   type = "string"
-  default = "aws/codebuild/standard:1.0"
+  default = "aws/codebuild/standard:3.0"
   description = "Docker image used by CodeBuild"
 }
 
