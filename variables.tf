@@ -13,7 +13,13 @@ variable "compute_type" {
 
 variable "environment" {}
 
+variable "github_token" {
+  type = string
+  default = ""
+}
+
 variable "encrypt_ami" {
+  type = bool
   default = true
 }
 
@@ -25,7 +31,7 @@ variable "kms_key_arn" {
 
 variable "environment_build_image" {
   type = "string"
-  default = "aws/codebuild/standard:1.0"
+  default = "aws/codebuild/standard:3.0"
   description = "Docker image used by CodeBuild"
 }
 
@@ -88,7 +94,7 @@ locals {
       "egrep \"${data.aws_region.current.name}\\:\\sami\\-\" build.log | cut -d' ' -f2 > ami_id.txt",
       # Packer doesn't return non-zero status; we must do that if Packer build failed
       "test -s ami_id.txt || exit 1",
-      "if [ ${var.encrypt_ami} = 1 ] ; then curl -qL -o ami_builder_event.json https://gist.githubusercontent.com/sionsmith/23b7dfcd3ab9c302dc1c172c871a589a/raw/cf96e3cde40f413afa1d3405f33d4163bdb8db0b/ami_builder_event.json && sed -i.bak \"s/<<AMI-ID>>/$(cat ami_id.txt)/g\" ami_builder_event.json && aws events put-events --entries file://ami_builder_event.json; fi",
+      "if [ ${var.encrypt_ami} =  1 ] ; then curl -qL -o ami_builder_event.json https://gist.githubusercontent.com/sionsmith/23b7dfcd3ab9c302dc1c172c871a589a/raw/cf96e3cde40f413afa1d3405f33d4163bdb8db0b/ami_builder_event.json && sed -i.bak \"s/<<AMI-ID>>/$(cat ami_id.txt)/g\" ami_builder_event.json && aws events put-events --entries file://ami_builder_event.json; fi",
       "echo build completed on `date`"
   ]
 }

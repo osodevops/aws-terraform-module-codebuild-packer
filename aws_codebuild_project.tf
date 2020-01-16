@@ -20,6 +20,11 @@ resource "aws_codebuild_project" "builder" {
     buildspec           = "${data.template_file.ami_buildspec.rendered}"
     git_clone_depth     = "0"
     report_build_status = true
+
+    auth {
+      type     = "OAUTH"
+      resource = aws_codebuild_source_credential.github_credential.arn
+    }
   }
 
   vpc_config {
@@ -27,4 +32,10 @@ resource "aws_codebuild_project" "builder" {
     subnets             = ["${var.codebuild_private_subnet_ids[0]}"]
     vpc_id              = "${var.vpc_id}"
   }
+}
+
+resource "aws_codebuild_source_credential" "github_credential" {
+  auth_type   = "PERSONAL_ACCESS_TOKEN"
+  server_type = "GITHUB"
+  token       = var.github_token
 }
