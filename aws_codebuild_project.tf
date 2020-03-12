@@ -1,8 +1,8 @@
 resource "aws_codebuild_project" "builder" {
-  name                  = upper(var.project_name)
-  description           = "Managed by Terraform: AMI builder using Packer and Ansible."
-  build_timeout         = var.build_timeout
-  service_role          = aws_iam_role.local_codebuild_role.arn
+  name          = upper(var.project_name)
+  description   = "Managed by Terraform: AMI builder using Packer and Ansible."
+  build_timeout = var.build_timeout
+  service_role  = aws_iam_role.local_codebuild_role.arn
 
   artifacts {
     type = "NO_ARTIFACTS"
@@ -25,14 +25,14 @@ resource "aws_codebuild_project" "builder" {
 
     auth {
       type     = "OAUTH"
-      resource = aws_codebuild_source_credential.github_credential.arn
+      resource = "aws_codebuild_source_credential.github_credential.arn"
     }
   }
 
   vpc_config {
-    security_group_ids  = [aws_security_group.codebuild.id]
-    subnets             = [var.codebuild_private_subnet_ids[0]]
-    vpc_id              = "${var.vpc_id}"
+    security_group_ids = [aws_security_group.codebuild.id]
+    subnets            = [var.codebuild_private_subnet_ids[0]]
+    vpc_id             = var.vpc_id
   }
 }
 
@@ -41,3 +41,4 @@ resource "aws_codebuild_source_credential" "github_credential" {
   server_type = "GITHUB"
   token       = var.github_token
 }
+

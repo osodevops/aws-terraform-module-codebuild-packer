@@ -6,3 +6,4 @@ resource "aws_lambda_permission" "cloudwatch_event" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.build_alert[0].arn
 }
+
