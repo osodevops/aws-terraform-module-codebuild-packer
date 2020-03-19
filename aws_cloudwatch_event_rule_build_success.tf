@@ -28,6 +28,6 @@ resource "aws_cloudwatch_event_target" "lamba_alert" {
   count     = var.encrypt_ami ? 1 : 0
   rule      = aws_cloudwatch_event_rule.build_alert[0].name
   target_id = "ami-encryption-lambda"
-  arn       = "aws_lambda_function.ami_encryption_lambda[0].arn"
+  arn       = aws_lambda_function.ami_encryption_lambda[0].arn
 }
 
