@@ -1,7 +1,7 @@
 data "aws_iam_policy_document" "lambda_config_trust" {
-  count         = var.encrypt_ami ? 1 : 0
+  count = var.encrypt_ami ? 1 : 0
   statement {
-    effect = "Allow"
+    effect  = "Allow"
     actions = ["sts:AssumeRole"]
 
     principals {
@@ -12,28 +12,29 @@ data "aws_iam_policy_document" "lambda_config_trust" {
 }
 
 data "aws_iam_policy_document" "lambda_config_policy" {
-  count         = var.encrypt_ami ? 1 : 0
+  count = var.encrypt_ami ? 1 : 0
   statement {
-    effect = "Allow"
+    effect    = "Allow"
     actions   = ["ec2:Describe*", "ec2:CreateSnapshot", "ec2:CreateImage", "ec2:CreateTags*", "ec2:CopyImage"]
     resources = ["*"]
   }
 
   statement {
-    effect = "Allow"
+    effect    = "Allow"
     actions   = ["cloudwatch:*"]
     resources = ["*"]
   }
 
   statement {
-    effect = "Allow"
+    effect    = "Allow"
     actions   = ["logs:*"]
     resources = ["arn:aws:logs:*:*:*"]
   }
 
   statement {
-    effect = "Allow"
-    actions = ["kms:*"]
+    effect    = "Allow"
+    actions   = ["kms:*"]
     resources = ["*"]
   }
 }
+
