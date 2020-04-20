@@ -3,14 +3,14 @@ data "aws_iam_policy_document" "local_codebuild" {
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
-      "logs:PutLogEvents"
+      "logs:PutLogEvents",
     ]
 
     resources = [
-      "*"]
+      "*",
+    ]
 
     effect = "Allow"
-
   }
 
   statement {
@@ -21,20 +21,27 @@ data "aws_iam_policy_document" "local_codebuild" {
       "ssm:DescribeDocumentParameters",
       "ssm:GetParametersByPath",
       "ssm:GetParameters",
-      "ssm:GetParameter"
+      "ssm:GetParameter",
     ]
 
     resources = [
-      "*"]
+      "*",
+    ]
 
     effect = "Allow"
-
   }
   statement {
-    sid = "allowPackerPassRole"
-    effect = "Allow"
-    actions = ["iam:PassRole"]
-    resources = ["*",]
+    sid       = "allowPackerPassRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid       = "allowCodeBuildPushEvents"
+    effect    = "Allow"
+    actions   = ["events:PutEvents"]
+    resources = ["*"]
   }
 
   statement {
@@ -76,12 +83,14 @@ data "aws_iam_policy_document" "local_codebuild" {
       "ec2:RegisterImage",
       "ec2:RunInstances",
       "ec2:StopInstances",
-      "ec2:TerminateInstances"
+      "ec2:TerminateInstances",
     ]
 
     resources = [
-      "*"]
+      "*",
+    ]
 
     effect = "Allow"
   }
 }
+

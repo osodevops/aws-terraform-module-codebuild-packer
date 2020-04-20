@@ -17,10 +17,12 @@ phases:
       - $${post_build_commands}
 EOF
 
-  vars {
-    install_commands    = "${join("\n      - ", local.ami_install_commands)}"
-    pre_build_commands  = "${join("\n      - ", local.ami_pre_build_commands)}"
-    build_commands      = "${join("\n      - ", local.ami_build_commands)}"
-    post_build_commands = "${join("\n      - ", local.ami_post_build_commands)}"
+
+  vars = {
+    install_commands    = join("\n      - ", local.ami_install_commands)
+    pre_build_commands  = join("\n      - ", local.ami_pre_build_commands)
+    build_commands      = join("\n      - ", local.ami_build_commands)
+    post_build_commands = join("\n      - ", local.ami_post_build_commands)
   }
 }
+
