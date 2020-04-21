@@ -91,7 +91,6 @@ locals {
     "./packer build -var-file=\"${var.packer_vars_file_location}\" -color=false ${var.packer_file_location} | tee build.log",
   ]
 
-
   ami_post_build_commands = [
     "egrep \"${data.aws_region.current.name}\\:\\sami\\-\" build.log | cut -d' ' -f2 > ami_id.txt",
     "test -s ami_id.txt || exit 1",
