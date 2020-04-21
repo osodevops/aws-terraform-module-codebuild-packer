@@ -25,7 +25,7 @@ resource "aws_codebuild_project" "builder" {
 
     auth {
       type     = "OAUTH"
-      resource = "aws_codebuild_source_credential.github_credential.arn"
+      resource = aws_codebuild_source_credential.github_credential.arn
     }
   }
 
