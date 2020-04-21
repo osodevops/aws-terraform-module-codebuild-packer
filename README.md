@@ -4,6 +4,10 @@
 
 ---
 
+This Terraform module creates the necessary resources to run a CodeBuild project to generate new customised AMI's. We use packer for handling the build process, this allows the user to introduce their favourite change management tool such as Ansible, Puppet or simply juse Bash scripts. 
+
+We recommend using our AMI encryption lambda funtion [AMI-Encryption-Lambda](https://github.com/osodevops/aws-lambda-encrypt-ami) to encrypt the new AMI once the build process is completed by Codebuild. The lambda is wrapped inside a terraform module to make it easy to deploy and manage. 
+
 This project is part of our open source DevOps adoption approach. 
 
 It's 100% Open Source and licensed under the [APACHE2](LICENSE).
