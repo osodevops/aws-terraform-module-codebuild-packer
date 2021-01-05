@@ -17,7 +17,7 @@ resource "aws_codebuild_project" "builder" {
   }
 
   source {
-    type                = "GITHUB"
+    type                = var.project_source
     location            = var.source_repository_url
     buildspec           = data.template_file.ami_buildspec.rendered
     git_clone_depth     = "0"
@@ -38,7 +38,7 @@ resource "aws_codebuild_project" "builder" {
 
 resource "aws_codebuild_source_credential" "github_credential" {
   auth_type   = "PERSONAL_ACCESS_TOKEN"
-  server_type = "GITHUB"
+  server_type = var.project_source
   token       = var.github_token
 }
 

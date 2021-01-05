@@ -59,6 +59,12 @@ variable "project_name" {
   description = "Name of the CodeBuild Project"
 }
 
+variable "project_source" {
+  type        = string
+  description = "The type of project i.e 'bitbucket', 'github', 'codecommit'"
+  default     = "GITHUB"
+}
+
 variable "source_repository_url" {
   type        = string
   description = "The source repository URL"
