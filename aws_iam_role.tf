@@ -3,4 +3,3 @@ resource "aws_iam_role" "local_codebuild_role" {
   description        = "Managed by Terraform"
   assume_role_policy = data.aws_iam_policy_document.forrole.json
 }
-

@@ -71,6 +71,11 @@ variable "common_tags" {
   type = map(string)
 }
 
+variable "s3_resource_name" {
+  description = "Name of a pre-existing module to allow access for build resources"
+  type        = string
+}
+
 locals {
   ami_install_commands = [
   ]
