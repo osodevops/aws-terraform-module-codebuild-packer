@@ -1,5 +1,5 @@
 resource "aws_iam_role" "codebuild_instance_role" {
-  name = "CODEBUILD-PACKER-IAM-ROLE"
+  name = "CODEBUILD-PACKER-${upper(var.project_name)}-IAM-ROLE"
 
   assume_role_policy = <<POLICY
 {
@@ -21,7 +21,7 @@ POLICY
 }
 
 resource "aws_iam_role_policy" "codebuild_instance_policy" {
-  name = "CODEBUILD-PACKER-INSTANCE-POLICY"
+  name = "CODEBUILD-PACKER-${upper(var.project_name)}-INSTANCE-POLICY"
 
   role = aws_iam_role.codebuild_instance_role.id
 
@@ -126,6 +126,6 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "codebuild_ec2_iam_profile" {
-  name = "CODEBUILD-PACKER-IAM-PROFILE"
+  name = "CODEBUILD-PACKER-${upper(var.project_name)}-IAM-PROFILE"
   role = aws_iam_role.codebuild_instance_role.name
 }
