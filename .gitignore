@@ -10,4 +10,21 @@
 .build-harness
 build-harness
 
-test.log
+*.tfplan
+*.tfstate
+*.tfstate.*
+.DS_Store
+*.retry
+*.pyc
+*.jar
+*.stackdump
+*.pem
+
+id_rsa*
+lambda-backup.zip
+.vscode
+venv
+sample.json
+.vagrant/
+*un~
+*~
