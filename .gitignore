@@ -1,12 +1,15 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Example user template
+# Compiled files
+*.tfstate
+*.tfstate.backup
 
-# IntelliJ project files
+# Module directory
+.terraform
 .idea
 *.iml
-.terraform
+
 .build-harness
 build-harness
+
 *.tfplan
 *.tfstate
 *.tfstate.*
