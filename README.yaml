@@ -1,0 +1,47 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: "AWS CodeBuild Terraform module"
+
+# Short description of this project
+description: |-
+  About AMI builder using native AWS CodeBuild running Packer and CodePipeline to orchestrate the entire process.
+
+  This Terraform module creates the necessary resources to run a CodeBuild project to generate new customised AMI's. We use packer for handling the build process, this allows the user to introduce their favourite change management tool such as Ansible, Puppet or simply juse Bash scripts.
+
+  We recommend using our AMI encryption lambda funtion [AMI-Encryption-Lambda](https://github.com/osodevops/aws-lambda-encrypt-ami) to encrypt the new AMI once the build process is completed by Codebuild. The lambda is wrapped inside a terraform module to make it easy to deploy and manage.
+
+# Canonical GitHub repo
+github_repo: osodevops/aws-terraform-module-codebuild-packer
+
+# How to use this project
+usage: |-
+  Include this repository as a module in your existing terraform code:
+  ```hcl
+  module "codebuild" {
+    source                            = "git::ssh://git@github.com/osodevops/aws-terraform-module-codebuild-packer.git"
+    codebuild_private_subnet_ids      = "${data.aws_subnet_ids.private.ids}"
+    common_tags                       = "${var.common_tags}"
+    environment                       = "${var.common_tags["Environment"]}"
+    packer_file_location              = "${var.packer_file_location}"
+    packer_build_subnet_ids           = "${data.aws_subnet_ids.public.ids}"
+    project_name                      = "${var.project_name}"
+    source_repository_url             = "${var.source_repository_url}"
+    vpc_id                            = "${data.aws_vpc.vpc.id}"
+  }
+  ```
+
+related:
+  - name: "AMI-Encryption-Lambda"
+    description: "Encrypt the new AMI once the build process is completed by Codebuild"
+    url: "https://github.com/osodevops/aws-lambda-encrypt-ami"
+
+# References
+references:
+  - name: "VAS Group AWS migration"
+    description: "Using this module we were able to re-build and migrate all VM worksloads."
+    url: "https://oso.sh/case-studies/how-we-helped-vas-group-achieve-growth-with-tableau/"
